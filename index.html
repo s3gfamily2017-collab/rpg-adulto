@@ -2,23 +2,19 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AURA</title>
     <style>
         body { background: #0d0614; color: #f3e6ff; font-family: sans-serif; text-align: center; padding: 15px; margin: 0; }
         .painel { background: #251438; border: 1px solid #3d2353; border-radius: 12px; padding: 10px; margin-bottom: 15px; }
-        .box { background: #1a0f26; border: 2px solid #3d2353; padding: 20px; border-radius: 16px; margin-bottom: 15px; text-align: left; }
-        .relogio { font-size: 32px; font-weight: bold; color: #d4af37; margin: 10px 0; text-align: center; }
-        .card { background: #2a163d; border: 2px solid #d4af37; padding: 18px; border-radius: 12px; margin-top: 15px; line-height: 1.6; }
+        .box { background: #1a0f26; border: 2px solid #3d2353; padding: 20px; border-radius: 16px; margin-bottom: 15px; text-align: center; }
+        .relogio { font-size: 32px; font-weight: bold; color: #d4af37; margin: 10px 0; }
+        .card { background: #2a163d; border: 2px solid #d4af37; padding: 18px; border-radius: 12px; margin-top: 15px; line-height: 1.6; text-align: left; }
         .card-title { color: #d4af37; font-weight: bold; font-size: 18px; margin-bottom: 8px; text-align: center; }
         .card-step { margin-top: 8px; font-size: 14px; color: #e1ccec; border-top: 1px dashed #3d2353; padding-top: 8px; }
-        button { background: #8a184e; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 15px; cursor: pointer; margin: 5px auto; width: 95%; max-width: 340px; display: block; }
+        button { background: #8a184e; color: white; border: none; padding: 14px 20px; border-radius: 8px; font-size: 15px; cursor: pointer; margin: 8px auto; width: 95%; max-width: 340px; display: block; }
         .btn-pequeno { width: auto; padding: 5px 15px; background: #3d2353; font-size: 14px; display: inline-block; margin: 0 4px; }
-        .btn-link { background: #d4af37; color: #0d0614; font-weight: bold; animation: pulse 2s infinite; }
-        h2 { color: #d4af37; margin: 10px 0; text-align: center; }
-        p { margin: 5px 0; }
-        .text-center { text-align: center; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+        .btn-link { background: #d4af37; color: #0d0614; font-weight: bold; width: auto; display: inline-block; }
     </style>
 </head>
 <body>
@@ -27,25 +23,21 @@
 
     <!-- Pontuação -->
     <div class="painel">
-        <p class="text-center">Anfitrião: <span id="v1">0</span> | Convidado: <span id="v2">0</span></p>
-        <div class="text-center" style="margin-top: 5px;">
-            <button class="btn-pequeno" onclick="document.getElementById('v1').innerText = parseInt(document.getElementById('v1').innerText)+1">Anfitrião +1</button>
-            <button class="btn-pequeno" onclick="document.getElementById('v2').innerText = parseInt(document.getElementById('v2').innerText)+1">Convidado +1</button>
-        </div>
+        <p>Anfitrião: <span id="v1">0</span> | Convidado: <span id="v2">0</span></p>
+        <button class="btn-pequeno" onclick="mudarPontos('p1')">Anfitrião +1</button>
+        <button class="btn-pequeno" onclick="mudarPontos('p2')">Convidado +1</button>
     </div>
 
     <!-- Temporizador -->
     <div class="painel">
         <div class="relogio" id="tempo-texto">02:00</div>
-        <div class="text-center">
-            <button class="btn-pequeno" onclick="ligarCronometro()">Iniciar</button>
-            <button class="btn-pequeno" onclick="pararCronometro()">Pausar</button>
-        </div>
+        <button class="btn-pequeno" onclick="ligarCronometro()">Iniciar</button>
+        <button class="btn-pequeno" onclick="pararCronometro()">Pausar</button>
     </div>
 
     <!-- Conteúdo Principal -->
     <div class="box">
-        <p id="narracao" class="text-center">Bem-vindos ao AURA. Escolham um local confortável e com pouca luz. Decidam quem assume o papel de Anfitrião e quem será o Convidado.</p>
+        <p id="narracao">Bem-vindos ao AURA. Escolham um local confortável e com pouca luz. Decidam quem assume o papel de Anfitrião e quem será o Convidado.</p>
         <div id="bloco-kama"></div>
     </div>
 
@@ -58,23 +50,34 @@
         var faseAtual = 0;
         var segundos = 120;
         var relogioRodando = null;
+        var pontosP1 = 0;
+        var pontosP2 = 0;
 
-        // Banco de perguntas e segredos para o jogo nunca ser repetitivo
         var perguntasIntimas = [
-            "Qual é o local mais arriscado ou invulgar onde já pensaste em ter um momento íntimo connosco?",
-            "Se pudesses introduzir um acessório ou um cenário novo na nossa intimidade hoje, qual seria?",
-            "Qual foi o momento ou a provocação específica que te deixou com mais desejo durante esta semana?",
-            "Há algum tipo de toque, ritmo ou zona do corpo que gostarias que eu explorasse mais detalhadamente hoje?",
-            "Descreve em detalhe uma fantasia tua que envolva controlo ou submissão mútua."
+            "Qual é o local mais arriscado onde já pensaste em ter um momento íntimo connosco?",
+            "Se pudesses introduzir um acessório novo na nossa intimidade hoje, qual seria?",
+            "Qual foi a provocação específica que te deixou com mais desejo esta semana?",
+            "Há alguma zona do corpo que gostarias que eu explorasse mais detalhadamente hoje?",
+            "Descreve uma fantasia tua que envolva controlo ou submissão mútua."
         ];
 
         var posicoes = [
-            { title: "A União de Lótus", desc: "Uma posição clássica de meditação e conexão íntima profunda.", step: "Como fazer: Sentem-se frente a frente. O Convidado senta-se no colo do Anfitrião, entrelaçando as pernas e os braços à volta das suas costas. Foquem-se no olhar fixo.", link: "https://google.com" },
-            { title: "A Flecha de Cupido", desc: "Uma variação deitada que oferece estabilidade e controlo milimétrico do ritmo.", step: "Como fazer: O Anfitrião deita-se de costas e o Convidado senta-se por cima, inclinando o tronco ligeiramente para a frente para apoiar as mãos no peito.", link: "https://google.com" },
-            { title: "O Triângulo de Vénus", desc: "Uma técnica focada no relaxamento muscular e na alteração profunda de ângulos.", step: "Como fazer: Coloquem duas ou três almofadas firmes debaixo da anca do parceiro que vai deitar-se de costas. Isto eleva a bacia.", link: "https://google.com" },
-            { title: "A Balança Secreta", desc: "Uma posição estimulante que utiliza o apoio e a borda da cama.", step: "Como fazer: Um dos parceiros deita-se de costas de forma a que as pernas fiquem ligeiramente para fora da borda da cama. O outro parceiro fica de pé.", link: "https://google.com" },
-            { title: "O Tigre Agachado", desc: "Variação de joelhos focada em total liberdade de movimentos e carícias nas costas.", step: "Como fazer: O Convidado apoia os joelhos e as mãos na cama. O Anfitrião posiciona-se logo atrás, também de joelhos, mantendo as mãos fixas nas ancas.", link: "https://google.com" }
+            { title: "A União de Lótus", desc: "Uma posição clássica de conexão íntima profunda.", step: "Como fazer: Sentem-se frente a frente. O Convidado senta-se no colo do Anfitrião, entrelaçando as pernas e os braços à volta das suas costas.", link: "https://google.com" },
+            { title: "A Flecha de Cupido", desc: "Uma variação deitada que oferece estabilidade e controlo do ritmo.", step: "Como fazer: O Anfitrião deita-se de costas e o Convidado senta-se por cima, inclinando o tronco para a frente.", link: "https://google.com" },
+            { title: "O Triângulo de Vénus", desc: "Uma técnica focada no relaxamento e na alteração de ângulos.", step: "Como fazer: Coloquem duas ou três almofadas firmes debaixo da anca do parceiro que vai deitar-se de costas.", link: "https://google.com" },
+            { title: "A Balança Secreta", desc: "Uma posição estimulante que utiliza a borda da cama.", step: "Como fazer: Um dos parceiros deita-se de costas de forma a que as pernas fiquem para fora da borda da cama.", link: "https://google.com" },
+            { title: "O Tigre Agachado", desc: "Variação de joelhos focada em liberdade de movimentos.", step: "Como fazer: O Convidado apoia os joelhos e as mãos na cama. O Anfitrião posiciona-se atrás, também de joelhos.", link: "https://google.com" }
         ];
+
+        function mudarPontos(player) {
+            if (player === 'p1') {
+                pontosP1++;
+                document.getElementById('v1').innerText = pontosP1;
+            } else {
+                pontosP2++;
+                document.getElementById('v2').innerText = pontosP2;
+            }
+        }
 
         function mudarFase(num) {
             faseAtual = num;
@@ -86,54 +89,65 @@
             pararCronometro();
 
             if (faseAtual == 1) {
-                txt.innerText = "O clima está definido. O Anfitrião assume o comando e deve escolher o tipo de desafio inicial para o casal:";
+                txt.innerText = "O Anfitrião assume o comando. Escolham o tipo de desafio inicial para o casal:";
                 segundos = 120; atualizarTextoTempo();
-                bts.innerHTML = '<button onclick="mudarFase(2)">🔥 Caminho do Toque (Sensorial)</button>' +
-                                '<button onclick="mudarFase(3)">💬 Caminho da Mente (Confissões)</button>';
+                bts.innerHTML = '<button onclick="mudarFase(2)">Caminho do Toque (Sensorial)</button>' +
+                                '<button onclick="mudarFase(3)">Caminho da Mente (Confissões)</button>';
             }
             else if (faseAtual == 2) {
                 txt.innerText = "Escolham um desafio físico para aquecer o ambiente:";
-                bts.innerHTML = '<button onclick="mudarFase(21)">💆 Massagem Vendada (2 min)</button>' +
-                                '<button onclick="mudarFase(22)">🧊 Desafio Quente/Frio (2 min)</button>';
+                bts.innerHTML = '<button onclick="mudarFase(21)">Massagem Vendada (2 min)</button>' +
+                                '<button onclick="mudarFase(22)">Desafio Quente e Frio (2 min)</button>';
             }
             else if (faseAtual == 21 || faseAtual == 22) {
-                txt.innerText = faseAtual == 21 ? "O Anfitrião venda os olhos. O Convidado faz uma massagem sensorial com as pontas dos dedos e o sopro quente." : "O Convidado usa algo gelado ou muito quente para tocar em 3 zonas inesperadas do corpo do parceiro.";
+                txt.innerText = faseAtual == 21 ? "O Anfitrião venda os olhos. O Convidado faz uma massagem com as pontas dos dedos e o sopro quente." : "O Convidado usa algo gelado ou morno para tocar em 3 zonas inesperadas do corpo do parceiro.";
                 segundos = 120; atualizarTextoTempo();
                 bts.innerHTML = '<button onclick="mudarFase(4)">Avançar para o Kamasutra</button>';
             }
-            // Secção de Confissões Melhorada
             else if (faseAtual == 3) {
                 txt.innerText = "Escolham a dinâmica da vossa partilha mental:";
-                bts.innerHTML = '<button onclick="mudarFase(31)">🤫 Sorteador de Confissões (Aleatório)</button>' +
-                                '<button onclick="mudarFase(32)">👀 Olhar Hipnótico (Conexão)</button>';
+                bts.innerHTML = '<button onclick="mudarFase(31)">Sorteador de Confissões</button>' +
+                                '<button onclick="mudarFase(32)">Olhar Hipnótico (2 min)</button>';
             }
             else if (faseAtual == 31) {
                 var perguntaSorteada = perguntasIntimas[Math.floor(Math.random() * perguntasIntimas.length)];
-                txt.innerText = "Desafio de Confissão para o Convidado:\n\n\"" + perguntaSorteada + "\"\n\nTêm 2 minutos para responder com total honestidade.";
-                segundos = 125; atualizarTextoTempo();
-                bts.innerHTML = '<button onclick="mudarFase(31)">🔄 Sortear Outra Pergunta</button><button onclick="mudarFase(4)">Avançar para o Kamasutra</button>';
+                txt.innerText = "Pergunta para o Convidado:\n\n" + perguntaSorteada;
+                segundos = 120; atualizarTextoTempo();
+                bts.innerHTML = '<button onclick="mudarFase(31)">Sortear Outra Pergunta</button><button onclick="mudarFase(4)">Avançar para o Kamasutra</button>';
             }
             else if (faseAtual == 32) {
-                txt.innerText = "Sentem-se muito próximos. Olhem fixamente nos olhos um do outro por 2 minutos sem desviar o olhar e em silêncio absoluto.";
+                txt.innerText = "Olhem fixamente nos olhos um do outro por 2 minutos sem desviar o olhar e em silêncio absoluto.";
                 segundos = 120; atualizarTextoTempo();
                 bts.innerHTML = '<button onclick="mudarFase(4)">Avançar para o Kamasutra</button>';
             }
             else if (faseAtual == 4) {
-                txt.innerText = "Sintonizados. Sorteiem uma posição sagrada do Kamasutra e executem o movimento sugerido.";
+                txt.innerText = "Sorteiem uma posição do Kamasutra e executem o movimento sugerido.";
                 segundos = 180; atualizarTextoTempo();
                 
                 var posSorteada = posicoes[Math.floor(Math.random() * posicoes.length)];
                 kama.innerHTML = '<div class="card">' +
                                  '<div class="card-title">' + posSorteada.title + '</div>' +
-                                 '<p>' + posSorteada.desc + '</p>' +
+                                 '<p>' + posiosSorteada.desc + '</p>' +
                                  '<div class="card-step">' + posSorteada.step + '</div>' +
                                  '</div>';
                 
-                bts.innerHTML = '<button onclick="mudarFase(4)">🔄 Sortear Outra Posição</button>' +
-                                '<button onclick="mudarFase(5)">👑 Concluir Jogo (Ver Perdedor)</button>';
+                bts.innerHTML = '<button onclick="mudarFase(4)">Sortear Outra Posição</button>' +
+                                '<button onclick="mudarFase(5)">Concluir Jogo (Ver Castigo)</button>';
             }
-            // Fase de Penalização / Fim do Jogo com Imagens
             else if (faseAtual == 5) {
-                var p1 = parseInt(document.getElementById("v1").innerText);
-                var p2 = parseInt(document.getElementById("v2").innerText);
                 var perdedorText = "";
+                var posicaoPenalizacao = posicoes[Math.floor(Math.random() * posicoes.length)];
+
+                if (pontosP1 === pontosP2) {
+                    perdedorText = "Empate! Ambos estiveram excelentes. Como castigo mútuo, devem executar a posição abaixo.";
+                } else {
+                    var quemPerdeu = pontosP1 < pontosP2 ? "Anfitrião" : "Convidado";
+                    perdedorText = "O jogo terminou! O " + quemPerdeu + " perdeu a rodada e deve executar a posição sorteada.";
+                }
+
+                txt.innerText = perdedorText;
+                
+                kama.innerHTML = '<div class="card" style="border-color: #8a184e;">' +
+                                 '<div class="card-title" style="color: #ff4d4d;">CASTIGO: ' + posicaoPenalizacao.title + '</div>' +
+                                 '<p>' + posicaoPenalizacao.desc + '</p>' +
+                                 '<div class="card-step" style="text-align:center;">' +
