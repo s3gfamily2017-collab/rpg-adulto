@@ -235,5 +235,5 @@
             var s = (secs % 60).toString().padStart(2, '0');
             return m + ":" + s;
         }
-
+function mudarPontos(player, val) {scores[player] = Math.max(0, scores[player] + val);document.getElementById('score-' + player).innerText = scores[player];}function irPara(nomeDoCaminho) {var nodo = caminhos[nomeDoCaminho];if (!nodo) return;pauseTimer();timeLeft = nodo.time || 120;document.getElementById('timer-num').innerText = formatTime(timeLeft);document.getElementById('texto-narrativo').innerText = nodo.text;var zonaKama = document.getElementById('zona-kamasutra');if (zonaKama) zonaKama.innerHTML = '';if (nodo.isKamaNode && zonaKama) {var pos = posicoesKamasutra[Math.floor(Math.random() * posicoesKamasutra.length)];zonaKama.innerHTML = '✨ ' + pos.title + '"' + pos.desc + '"';}var zonaBotoes = document.getElementById('zona-botoes');if (!zonaBotoes) return;zonaBotoes.innerHTML = '';nodo.choices.forEach(function(opcao) {var botao = document.createElement('button');botao.className = 'action-btn';botao.innerText = opcao.text;botao.onclick = function() {if (opcao.score) mudarPontos(opcao.score, 1);irPara(opcao.next);};zonaBotoes.appendChild(botao);});}
 
