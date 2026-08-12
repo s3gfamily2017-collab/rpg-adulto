@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>AURA: Kama Play</title>
-    
+    <title>AURA</title>
     <style>
         :root { 
             --bg: #0d0614; 
@@ -64,7 +63,6 @@
             color: var(--accent);
             letter-spacing: 2px;
             margin-bottom: 8px;
-            font-variant-numeric: tabular-nums;
         }
         .timer-controls button {
             background: var(--magenta);
@@ -99,25 +97,71 @@
             cursor: pointer; 
             text-align: center; 
         }
-        button.action-btn:hover { filter: brightness(1.2); }
         .footer-tag { font-size: 10px; color: #69527d; text-transform: uppercase; letter-spacing: 2px; margin-top: auto; padding-top: 15px; }
     </style>
+</head>
+<body>
 
+    <h2>AURA: Kama Play</h2>
+
+    <!-- Placar Superior -->
+    <div class="scoreboard">
+        <div class="player-score">
+            <div>Anfitrião</div>
+            <div class="score-box">
+                <button class="score-btn" onclick="mudarPontos('p1', -1)">-</button>
+                <span id="score-p1">0</span>
+                <button class="score-btn" onclick="mudarPontos('p1', 1)">+</button>
+            </div>
+        </div>
+        <div class="player-score">
+            <div>Convidado</div>
+            <div class="score-box">
+                <button class="score-btn" onclick="mudarPontos('p2', -1)">-</button>
+                <span id="score-p2">0</span>
+                <button class="score-btn" onclick="mudarPontos('p2', 1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Relógio -->
+    <div class="timer-container">
+        <div class="timer-display" id="timer-num">02:00</div>
+        <div class="timer-controls">
+            <button onclick="startTimer()">Iniciar</button>
+            <button onclick="pauseTimer()">Pausar</button>
+        </div>
+    </div>
+
+    <!-- Texto do Jogo -->
+    <div class="box">
+        <p id="texto-narrativo">Bem-vindos ao AURA. Escolham um local confortável e com pouca luz. Decidam quem assume o papel de Anfitrião e quem será o Convidado.</p>
+        <div id="zona-kamasutra"></div>
+    </div>
+
+    <!-- Zona de Opções -->
+    <div class="choices" id="zona-botoes">
+        <button class="action-btn" onclick="irPara('fase_inicial')">Papéis Definidos: Começar Jogo</button>
+    </div>
+
+    <div class="footer-tag">+18 • Uso Privado • Kamasutra Roleplay</div>
+
+    <!-- Lógica de Funcionamento Segura -->
     <script>
-        let scores = { p1: 0, p2: 0 };
-        let timerInterval = null;
-        let timeLeft = 120;
+        var scores = { p1: 0, p2: 0 };
+        var timerInterval = null;
+        var timeLeft = 120;
 
-        const posicoesKamasutra = [
+        var posicoesKamasutra = [
             { title: "A União de Lótus", desc: "Uma posição de conexão profunda. Sentem-se frente a frente com as pernas entrelaçadas. Foquem-se no olhar e sincronizem a respiração." },
             { title: "A Flecha de Cupido", desc: "Uma variação deitada que oferece estabilidade. Um dita o ritmo milimetricamente, enquanto o outro foca apenas nas sensações recebidas." },
-            { title: "O Triângulo de Vénus", desc: "Utilizem almofadas para elevar a anca e create novos ângulos. Esta variação maximiza o contacto pele com pele." },
+            { title: "O Triângulo de Vénus", desc: "Utilizem almofadas para elevar a anca e criar novos ângulos. Esta variação maximiza o contacto pele com pele." },
             { title: "A Balança Secreta", desc: "Uma posição que exige cooperação mútua à beira da cama. O foco aqui é o equilíbrio e a comunicação verbal." },
             { title: "O Abraço de Bambu", desc: "Uma variação vertical ou semi-inclinada onde os corpos se fundem. Ideal para carícias lentas no pescoço." },
             { title: "A Estrela Cadente", desc: "Uma rotação suave de ângulos na cama. Permite que ambos explorem o toque nas pernas e abdómen." }
         ];
 
-        const caminhos = {
+        var caminhos = {
             fase_inicial: {
                 text: "O clima está definido. O Anfitrião assume o comando e deve escolher a atmosfera inicial para o casal:",
                 time: 120,
@@ -127,7 +171,7 @@
                 ]
             },
             caminho_toque: {
-                text: "O Anfitrião ganhou o direito a receber uma massagem relaxante do Convidado nas costas ou ombros. Ativem o cronómetro abaixo para acompanhar.",
+                text: "O Anfitrião ganhou o direito a receber uma massagem relaxante do Convidado nas costas ou ombros. Ativem o cronómetro abaixo para cronometrar.",
                 time: 120,
                 choices: [
                     { text: "Usar óleo de massagem (+1 Ponto Convidado)", next: "kamasutra_fase_1", score: 'p2' },
@@ -167,46 +211,6 @@
             }
         };
 
-        // --- AQUI COMEÇA O CÓDIGO DA SUA IMAGEM ADAPTADO ---
-        function mudarPontos(player, val) {
-            scores[player] = Math.max(0, scores[player] + val);
-            document.getElementById('score-' + player).innerText = scores[player];
-        }
-
-        function irPara(nomeDoCaminho) {
-            var nodo = caminhos[nomeDoCaminho];
-            if (!nodo) return;
-
-            pauseTimer();
-            timeLeft = nodo.time || 120;
-            document.getElementById('timer-num').innerText = formatTime(timeLeft);
-            document.getElementById('texto-narrativo').innerText = nodo.text;
-            
-            var zonaKama = document.getElementById('zona-kamasutra');
-            if (zonaKama) zonaKama.innerHTML = '';
-
-            if (nodo.isKamaNode && zonaKama) {
-                var pos = posicoesKamasutra[Math.floor(Math.random() * posicoesKamasutra.length)];
-                zonaKama.innerHTML = '<div class="kama-card"><div class="kama-title">✨ ' + pos.title + '</div><div class="kama-desc">"' + pos.desc + '"</div></div>';
-            }
-
-            var zonaBotoes = document.getElementById('zona-botoes');
-            if (!zonaBotoes) return;
-            zonaBotoes.innerHTML = '';
-
-            nodo.choices.forEach(function(opcao) {
-                var botao = document.createElement('button');
-                botao.className = 'action-btn';
-                botao.innerText = opcao.text;
-                botao.onclick = function() {
-                    if (opcao.score) mudarPontos(opcao.score, 1);
-                    irPara(opcao.next);
-                };
-                zonaBotoes.appendChild(botao);
-            });
-        }
-        // --- FIM DO BLOCO DA IMAGEM ---
-
         function startTimer() {
             if (timerInterval) return;
             timerInterval = setInterval(function() {
@@ -216,7 +220,7 @@
                 } else {
                     clearInterval(timerInterval);
                     timerInterval = null;
-                    alert("✨ Tempo esgotado! Concluam a ação ou passem ao próximo passo.");
+                    alert("Tempo esgotado!");
                 }
             }, 1000);
         }
@@ -225,4 +229,11 @@
             clearInterval(timerInterval);
             timerInterval = null;
         }
+
+        function formatTime(secs) {
+            var m = Math.floor(secs / 60).toString().padStart(2, '0');
+            var s = (secs % 60).toString().padStart(2, '0');
+            return m + ":" + s;
+        }
+
 
