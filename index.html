@@ -10,7 +10,8 @@
         .box { background: #1a0f26; border: 2px solid #3d2353; padding: 20px; border-radius: 16px; margin-bottom: 15px; }
         .relogio { font-size: 36px; font-weight: bold; color: #d4af37; margin: 10px 0; }
         .card { background: #2a163d; border: 2px solid #d4af37; padding: 18px; border-radius: 12px; margin-top: 15px; text-align: left; }
-        .card-title { color: #d4af37; font-weight: bold; font-size: 18px; margin-bottom: 8px; text-align: center; }
+        .card-title { color: #d4af37; font-weight: bold; font-size: 18px; margin-bottom: 4px; text-align: center; }
+        .card-step { font-size: 14px; color: #e1ccec; border-top: 1px dashed #3d2353; margin-top: 8px; padding-top: 8px; }
         button { background: #8a184e; color: white; border: none; padding: 14px 20px; border-radius: 8px; font-size: 15px; cursor: pointer; margin: 8px auto; width: 95%; max-width: 340px; display: block; font-weight: bold; }
         .btn-pequeno { width: auto; padding: 5px 15px; background: #3d2353; font-size: 14px; display: inline-block; margin: 0 4px; }
     </style>
@@ -19,14 +20,14 @@
 
     <h2>AURA: Tesão Total</h2>
 
-    <!-- Pontuação Direta sem Erros -->
+    <!-- Pontuação -->
     <div class="painel">
         <p>Anfitrião: <span id="v1">0</span> | Convidado: <span id="v2">0</span></p>
         <button class="btn-pequeno" onclick="document.getElementById('v1').innerText = parseInt(document.getElementById('v1').innerText)+1">Anfitrião +1</button>
         <button class="btn-pequeno" onclick="document.getElementById('v2').innerText = parseInt(document.getElementById('v2').innerText)+1">Convidado +1</button>
     </div>
 
-    <!-- Temporizador Simplificado -->
+    <!-- Temporizador -->
     <div class="painel">
         <div class="relogio" id="tempo-texto">05:00</div>
         <button class="btn-pequeno" onclick="ligarCronometro()">Iniciar</button>
@@ -35,11 +36,11 @@
 
     <!-- Conteúdo do Jogo -->
     <div class="box">
-        <p id="narracao">Bem-vindos ao AURA. Decidam quem vai mandar primeiro (Anfitrião) e quem vai obedecer (Convidado).</p>
+        <p id="narracao">Prepara o quarto e desnum-se. Decidam quem vai mandar primeiro (Anfitrião) e quem vai obedecer (Convidado).</p>
         <div id="bloco-kama"></div>
     </div>
 
-    <!-- Botão de Avanço Simples -->
+    <!-- Botão de Avanço -->
     <div id="bloco-botoes">
         <button onclick="avancarFase()">Começar Preliminares</button>
     </div>
@@ -49,9 +50,33 @@
         var segundos = 300;
         var loop = null;
 
-        var n1 = ["Massagem e Sopro (Aperta o rabo e coxas com óleo quente)", "Lamber e Provocar (Lambe os mamilos e o pescoço)", "Roçar de Corpos (Roça a o caralho na cona completamente nus)"];
-        var n2 = ["Chupar na Cama (Com duas almofadas debaixo do rabo)", "Mamada de Cadeira (Anfitrião sentado e Convidado de joelhos)", "69 de Lado (Chuparem-se mutuamente deitados de lado)"];
-        var n3 = ["Foder de Lótus (Penetração sentados colados no colo)", "Cavalgada Selvagem (Convidado por cima controlando o ritmo)", "Foder de Quatro (Convidado de quatro empinando bem o cu)"];
+        // Banco de dados reduzido para as 6 melhores e mais intensas posições por nível
+        var n1 = [
+            { t: "Massagem e Sopro", s: "O Anfitrião fecha os olhos. O Convidado esfrega as mãos com óleo quente e aperta o rabo, coxas e costas do parceiro, alternando com sopros quentes nos colhões ou na rata." },
+            { t: "Lamber e Provocar", s: "O Convidado usa a ponta da língua molhada para lamber os mamilos, o pescoço e a virilha do parceiro, aproximando-se da piça ou da rata mas sem lhes tocar diretamente." },
+            { t: "Roçar de Corpos", s: "Completamente nus, deitados de frente um para o outro. Roçam a piça na rata ou nos colhões, apertando os peitos com força, apenas sentindo o calor e o suor um do outro." },
+            { t: "Dedos e Provocação", s: "O Convidado usa os dedos bem lubrificados para acariciar e esfregar o clitóris e os lábios da rata, ou para puxar e massajar o corpo da piça e o saco, deixando o outro louco." },
+            { t: "Masturbação Mútua Espelhada", s: "Sentem-se de frente um para o outro na cama a pouca distância. Começam a masturbar-se sozinhos (bater pheta ou esfregar a rata), olhando fixamente nos olhos ou nas mãos do parceiro." },
+            { t: "Lamber por Trás", s: "O Anfitrião fica de quatro na cama. O Convidado mete-se atrás de joelhos e usa a língua para dar lambidelas lentas nas pregas do cu e na parte de trás dos colhões ou da rata." }
+        ];
+
+        var n2 = [
+            { t: "Chupar na Cama", s: "Quem vai receber deita-se de costas com duas almofadas debaixo do rabo para empinar bem a piça ou a rata. Quem mama fica de joelhos no meio das pernas, focando em chupar sem pressas." },
+            { t: "Mamada de Cadeira", s: "O Anfitrião senta-se numa cadeira ou na borda da cama. O Convidado fica de joelhos no chão à sua frente. Podes segurar a cabeça do parceiro enquanto ele te chupa a piça ou te lambe a rata." },
+            { t: "69 de Lado", s: "Deitem-se ambos de lado, mas invertidos (a tua boca fica na piça/rata dele e a boca dele na tua). É uma conchinha invertida onde os dois chupam e lambem ao mesmo tempo." },
+            { t: "Garganta Funda na Borda", s: "Quem recebe deita-se de costas na cama com a cabeça e os ombros pendurados um pouco para fora do colchão. O parceiro ativo fica de joelhos ou de pé no chão, empurrando a piça até ao fundo da garganta." },
+            { t: "O Trono Humano (Facesitting)", s: "O parceiro ativo deita-se de costas na cama. Quem vai receber o sexo oral senta-se por cima da cara dele, virado para os pés, de joelhos, colando a rata ou os colhões diretamente na sua boca." },
+            { t: "Submissão de Bruços", s: "Quem recebe deita-se de barriga para baixo na cama e coloca uma almofada debaixo da barriga para empinar o quadril. O parceiro ativo lambe a rata ou os colhões por trás e chupa o cu." }
+        ];
+
+        var n3 = [
+            { t: "Foder de Lótus", s: "O Anfitrião senta-se de pernas cruzadas. O Convidado senta-se por cima do seu colo, cavalgando e enfiando a piça lá dentro, enquanto se abraçam, roçam e beijam com força." },
+            { t: "Cavalgada Selvagem", s: "O Anfitrião deita-se de costas. O Convidado antes senta-se por cima da piça, controlando o ritmo da foda, subindo e descendo enquanto esfrega o clitóris ou aperta o saco." },
+            { t: "Foder de Quatro", s: "O Convidado fica de quatro na cama, empinando bem o rabo. O Anfitrião mete-se atrás de joelhos e penetra por trás (vaginal ou anal) com força, segurando firmemente nas ancas." },
+            { t: "O Triângulo Almofadado", s: "Quem recebe deita-se de costas com três almofadas empilhadas debaixo do rabo para levantar bem a bacia. O parceiro entra por cima mantendo o peito colado numa foda ultra profunda." },
+            { t: "Foda na Borda da Cama", s: "Quem recebe fica deitado de costas com o rabo mesmo no limite da borda do colchão e joelhos dobrados. O parceiro ativo fode em pé ou de joelhos no chão à frente com penetração total." },
+            { t: "Tesoura de Lado", s: "Deitem-se ambos de lado, virados de frente um para o outro. As vossas pernas entrelaçam-se como uma tesoura aberta. Isto permite que a piça entre de lado na rata ou no cu de forma lenta e húmida." }
+        ];
 
         function avancarFase() {
             fase++;
@@ -63,21 +88,24 @@
             pararCronometro();
 
             if (fase == 1) {
-                txt.innerText = "Nível 1: Preliminares. Cumpram o desafio sorteado durante 5 minutos:";
+                txt.innerText = "Nível 1: Preliminares. Cumpram o desafio sorteado durante 5 minutos para acumular tesão:";
                 segundos = 300;
-                kama.innerHTML = '<div class="card"><div class="card-title">' + n1[Math.floor(Math.random() * n1.length)] + '</div></div>';
+                var sorteio = n1[Math.floor(Math.random() * n1.length)];
+                kama.innerHTML = '<div class="card"><div class="card-title">' + sorteio.t + '</div><div class="card-step">' + sorteio.s + '</div></div>';
                 bts.innerHTML = '<button onclick="avancarFase()">Ir para Nível 2 (Sexo Oral)</button>';
             } 
             else if (fase == 2) {
-                txt.innerText = "Nível 2: Sexo Oral. Chupem ou lambam com vontade durante 7 minutos:";
+                txt.innerText = "Nível 2: Sexo Oral. Chupem ou lambem com vontade durante 7 minutos inteiros:";
                 segundos = 420;
-                kama.innerHTML = '<div class="card"><div class="card-title">' + n2[Math.floor(Math.random() * n2.length)] + '</div></div>';
+                var sorteio = n2[Math.floor(Math.random() * n2.length)];
+                kama.innerHTML = '<div class="card"><div class="card-title">' + sorteio.t + '</div><div class="card-step">' + sorteio.s + '</div></div>';
                 bts.innerHTML = '<button onclick="avancarFase()">Ir para Nível 3 (Foder)</button>';
             } 
             else if (fase == 3) {
-                txt.innerText = "Nível 3: Posições de Foda. Metam o caralho lá dentro e fodam bem durante 10 minutos:";
+                txt.innerText = "Nível 3: Posições de Foda. Metam a piça lá dentro e fodam com força durante 10 minutos:";
                 segundos = 600;
-                kama.innerHTML = '<div class="card"><div class="card-title">' + n3[Math.floor(Math.random() * n3.length)] + '</div></div>';
+                var sorteio = n3[Math.floor(Math.random() * n3.length)];
+                kama.innerHTML = '<div class="card"><div class="card-title">' + sorteio.t + '</div><div class="card-step">' + sorteio.s + '</div></div>';
                 bts.innerHTML = '<button onclick="avancarFase()">Ver Castigo de Submissão</button>';
             } 
             else if (fase == 4) {
@@ -86,7 +114,10 @@
                 var perdedor = p1 < p2 ? "Anfitrião" : "Convidado";
                 if (p1 == p2) perdedor = "Os dois (Empate)";
                 
-                txt.innerText = "Fim de Jogo! O perdedor é o " + perdedor + ". Deve abrir as pernas e submeter-se à foda final escolhida pelo parceiro.";
+                var castigoFinal = n3[Math.floor(Math.random() * n3.length)];
+
+                txt.innerText = "Fim de Jogo! O perdedor é o " + perdedor + ". Deve abrir as pernas e submeter-se obrigatoriamente à foda final na posição sorteada abaixo:";
+                kama.innerHTML = '<div class="card" style="border-color: #ff4d4d;"><div class="card-title" style="color: #ff4d4d;">🔥 CASTIGO OBRIGATÓRIO: ' + castigoFinal.t + '</div><div class="card-step">' + castigoFinal.s + '</div></div>';
                 bts.innerHTML = '<button onclick="fase=0; avancarFase();">Iniciar Nova Escalada</button>';
             }
             atualizarRelogio();
@@ -96,6 +127,7 @@
             if (loop != null) return;
             loop = setInterval(function() {
                 if (segundos > 0) { segundos--; atualizarRelogio(); } 
+ 
                 else { pararCronometro(); alert("Tempo esgotado!"); }
             }, 1000);
         }
