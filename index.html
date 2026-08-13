@@ -2,48 +2,39 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AURA</title>
     <style>
-        body { background: #0d0614; color: #f3e6ff; font-family: sans-serif; text-align: center; padding: 15px; margin: 0; }
+        body { background: #0d0614; color: #f3e6ff; font-family: sans-serif; text-align: center; padding: 15px; }
         .painel { background: #251438; border: 1px solid #3d2353; border-radius: 12px; padding: 10px; margin-bottom: 15px; }
-        .box { background: #1a0f26; border: 2px solid #3d2353; padding: 20px; border-radius: 16px; margin-bottom: 15px; text-align: left; }
-        .relogio { font-size: 32px; font-weight: bold; color: #d4af37; margin: 10px 0; text-align: center; }
-        .card { background: #2a163d; border: 2px solid #d4af37; padding: 18px; border-radius: 12px; margin-top: 15px; line-height: 1.6; }
-        .card-title { color: #d4af37; font-weight: bold; font-size: 18px; margin-bottom: 8px; text-align: center; }
-        .card-step { margin-top: 8px; font-size: 14px; color: #e1ccec; border-top: 1px dashed #3d2353; padding-top: 8px; }
-        button { background: #8a184e; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 15px; cursor: pointer; margin: 5px auto; width: 95%; max-width: 340px; display: block; }
-        .btn-pequeno { width: auto; padding: 5px 15px; background: #3d2353; font-size: 14px; display: inline-block; margin: 0 4px; }
-        h2 { color: #d4af37; margin: 10px 0; text-align: center; }
-        p { margin: 5px 0; }
-        .text-center { text-align: center; }
+        .box { background: #1a0f26; border: 2px solid #3d2353; padding: 20px; border-radius: 16px; margin-bottom: 15px; }
+        .relogio { font-size: 32px; font-weight: bold; color: #d4af37; margin: 10px 0; }
+        .card { background: #2a163d; border: 2px solid #d4af37; padding: 15px; border-radius: 12px; margin-top: 15px; font-style: italic; }
+        button { background: #8a184e; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 15px; cursor: pointer; margin: 5px; width: 90%; max-width: 300px; }
+        .btn-pequeno { width: auto; padding: 5px 15px; background: #3d2353; font-size: 14px; }
     </style>
 </head>
 <body>
 
     <h2>AURA: Kama Play</h2>
 
-    <!-- Pontuação -->
+    <!-- Pontuação Prática -->
     <div class="painel">
-        <p class="text-center">Anfitrião: <span id="v1">0</span> | Convidado: <span id="v2">0</span></p>
-        <div class="text-center" style="margin-top: 5px;">
-            <button class="btn-pequeno" onclick="document.getElementById('v1').innerText = parseInt(document.getElementById('v1').innerText)+1">Anfitrião +1</button>
-            <button class="btn-pequeno" onclick="document.getElementById('v2').innerText = parseInt(document.getElementById('v2').innerText)+1">Convidado +1</button>
-        </div>
+        <p>Anfitrião: <span id="v1">0</span> | Convidado: <span id="v2">0</span></p>
+        <button class="btn-pequeno" onclick="document.getElementById('v1').innerText = parseInt(document.getElementById('v1').innerText)+1">Anfitrião +1</button>
+        <button class="btn-pequeno" onclick="document.getElementById('v2').innerText = parseInt(document.getElementById('v2').innerText)+1">Convidado +1</button>
     </div>
 
-    <!-- Temporizador -->
+    <!-- Temporizador Prático -->
     <div class="painel">
         <div class="relogio" id="tempo-texto">02:00</div>
-        <div class="text-center">
-            <button class="btn-pequeno" onclick="ligarCronometro()">Iniciar</button>
-            <button class="btn-pequeno" onclick="pararCronometro()">Pausar</button>
-        </div>
+        <button class="btn-pequeno" onclick="ligarCronometro()">Iniciar</button>
+        <button class="btn-pequeno" onclick="pararCronometro()">Pausar</button>
     </div>
 
-    <!-- Conteúdo Principal -->
+    <!-- Texto e Conteúdo Principal -->
     <div class="box">
-        <p id="narracao" class="text-center">Bem-vindos ao AURA. Escolham um local confortável e com pouca luz. Decidam quem assume o papel de Anfitrião e quem será o Convidado.</p>
+        <p id="narracao">Bem-vindos ao AURA. Escolham um local confortável e com pouca luz. Decidam quem assume o papel de Anfitrião e quem será o Convidado.</p>
         <div id="bloco-kama"></div>
     </div>
 
@@ -57,20 +48,13 @@
         var segundos = 120;
         var relogioRodando = null;
 
-        // Banco de dados expandido: 12 Posições com explicações passo a passo
         var posicoes = [
-            { title: "A União de Lótus", desc: "Uma posição clássica de meditação e conexão íntima profunda.", step: "Como fazer: Sentem-se frente a frente. O Convidado senta-se no colo do Anfitrião, entrelaçando as pernas e os braços à volta das suas costas. Foquem-se no olhar fixo e sincronizem a respiração." },
-            { title: "A Flecha de Cupido", desc: "Uma variação deitada que oferece estabilidade e controlo milimétrico do ritmo.", step: "Como fazer: O Anfitrião deita-se de costas e o Convidado senta-se por cima, inclinando o tronco ligeiramente para a frente para apoiar as mãos no peito ou ombros do parceiro. Isto permite alternar o controlo da velocidade." },
-            { title: "O Triângulo de Vénus", desc: "Uma técnica focada no relaxamento muscular e na alteração profunda de ângulos.", step: "Como fazer: Coloquem duas ou três almofadas firmes debaixo da anca do parceiro que vai deitar-se de costas. Isto eleva a bacia e maximiza o contacto pele com pele com um esforço físico mínimo." },
-            { title: "A Balança Secreta", desc: "Uma posição estimulante que utiliza o apoio e a borda da cama.", step: "Como fazer: Um dos parceiros deita-se de costas de forma a que as pernas fiquem ligeiramente para fora da borda da cama, apoiando os pés no chão. O outro parceiro fica de pé ou de joelhos em frente, ditando o ritmo." },
-            { title: "O Abraço de Bambu", desc: "Variação semi-vertical ideal para proximidade física e contacto labial constante.", step: "Como fazer: Sentados na cama, um de frente para o outro. Um parceiro mantém uma perna esticada e dobra a outra, enquanto o segundo parceiro se acomoda no espaço livre, permitindo carícias lentas no pescoço." },
-            { title: "A Estrela Cadente", desc: "Uma variação lateral confortável que evita o cansaço e prolonga o momento.", step: "Como fazer: Deitem-se ambos de lado (posição de 'conchinha'), virados para a mesma direção. O parceiro que está atrás abraça a cintura do outro. Perfeito para um ritmo muito lento e relaxado." },
-            { title: "O Trono de Marfim", desc: "Posição sentada com excelente estimulação visual e liberdade total para as mãos.", step: "Como fazer: O Anfitrião senta-se numa cadeira firme ou na borda da cama com os pés bem assentes no chão. O Convidado senta-se de costas para ele, no seu colo, controlando os movimentos enquanto os braços do Anfitrião abraçam a sua cintura." },
-            { title: "A Garça Real", desc: "Uma posição assimétrica que altera a perceção de profundidade e sensibilidade.", step: "Como fazer: Um parceiro deita-se de costas e eleva apenas uma das pernas, apoiando-a sobre o ombro do parceiro que está por cima (que fica de joelhos). A outra perna permanece relaxada na cama." },
-            { title: "O Tigre Agachado", desc: "Variação de joelhos focada em total liberdade de movimentos e carícias nas costas.", step: "Como fazer: O Convidado apoia os joelhos e as mãos na cama (posição de quatro apoios). O Anfitrião posiciona-se logo atrás, também de joelhos, mantendo as mãos fixas nas ancas do parceiro para guiar o movimento." },
-            { title: "A Flor de Jasmim", desc: "Uma variação invertida que desafia a gravidade e cria uma dinâmica muito intensa.", step: "Como fazer: O Anfitrião deita-se de costas com os joelhos dobrados junto ao peito. O Convidado posiciona-se por cima, mas virado na direção oposta (olhando para os pés do Anfitrião)." },
-            { title: "A Ponte de Ouro", desc: "Uma posição ativa que exige um pouco mais de energia e foco no abdómen.", step: "Como fazer: O Convidado deita-se de costas e eleva a bacia, apoiando o peso nos ombros e nos pés (formando uma ponte). O Anfitrião apoia-se de joelhos à sua frente. Pode usar almofadas abaixo da bacia para facilitar." },
-            { title: "O Arco do Triunfo", desc: "Uma variação que mistura o toque lateral com total flexibilidade de movimentos.", step: "Como fazer: Ambos deitados de lado, mas de frente um para o outro. As pernas entrelaçam-se como uma tesoura. Esta posição permite carícias no rosto, beijos lentos e conversas sussurradas durante o ato." }
+            "✨ A União de Lótus: Sentem-se frente a frente com as pernas entrelaçadas. Foquem-se no olhar e sincronizem a respiração.",
+            "✨ A Flecha de Cupido: Uma variação deitada que oferece estabilidade. Um dita o ritmo milimetricamente, enquanto o outro foca apenas nas sensações recebidas.",
+            "✨ O Triângulo de Vénus: Utilizem almofadas para elevar a anca e criar novos ângulos. Esta variação maximiza o contacto pele com pele.",
+            "✨ A Balança Secreta: Uma posição que exige cooperação mútua à beira da cama. O foco aqui é o equilíbrio e a comunicação verbal.",
+            "✨ O Abraço de Bambu: Uma variação vertical ou semi-inclinada onde os corpos se fundem. Ideal para carícias lentas no pescoço.",
+            "✨ A Estrela Cadente: Uma rotação suave de ângulos na cama. Permite que ambos explorem o toque nas pernas e abdómen."
         ];
 
         function mudarFase(num) {
@@ -83,34 +67,67 @@
             pararCronometro();
 
             if (faseAtual == 1) {
-                txt.innerText = "O clima está definido. O Anfitrião assume o comando e deve escolher o tipo de desafio inicial para o casal:";
+                txt.innerText = "O clima está definido. O Anfitrião assume o comando e deve escolher a atmosfera inicial para o casal:";
                 segundos = 120;
                 atualizarTextoTempo();
-                bts.innerHTML = '<button onclick="mudarFase(2)">🔥 Caminho do Toque (Sensorial)</button>' +
-                                '<button onclick="mudarFase(3)">💬 Caminho da Mente (Confissões)</button>';
+                bts.innerHTML = '<button onclick="mudarFase(2)">🔥 Toque e Sensação (Massagens)</button><button onclick="mudarFase(3)">💬 Confissões (Fantasias)</button>';
             }
-            // Sub-ramos do Toque
             else if (faseAtual == 2) {
-                txt.innerText = "Escolham um desafio físico para aquecer o ambiente:";
-                bts.innerHTML = '<button onclick="mudarFase(21)">💆 Massagem Vendada (2 min)</button>' +
-                                '<button onclick="mudarFase(22)">🧊 Desafio Quente/Frio (2 min)</button>';
-            }
-            else if (faseAtual == 21) {
-                txt.innerText = "O Anfitrião deve vendar os olhos. O Convidado faz uma massagem de 2 minutos usando apenas a ponta dos dedos e o sopro quente.";
-                segundos = 120; atualizarTextoTempo();
+                txt.innerText = "O Anfitrião ganhou o direito a receber uma massagem relaxante do Convidado nas costas ou ombros. Ativem o cronómetro abaixo.";
+                segundos = 120;
+                atualizarTextoTempo();
                 bts.innerHTML = '<button onclick="mudarFase(4)">Avançar para o Kamasutra</button>';
             }
-            else if (faseAtual == 22) {
-                txt.innerText = "O Convidado usa algo frio (como uma bebida gelada) ou muito quente (as mãos friccionadas) para tocar em 3 zonas do corpo do Anfitrião.";
-                segundos = 120; atualizarTextoTempo();
-                bts.innerHTML = '<button onclick="mudarFase(4)">Avançar para o Kamasutra</button>';
-            }
-            // Sub-ramos da Mente
             else if (faseAtual == 3) {
-                txt.innerText = "Escolham um desafio psicológico e de intimidade verbal:";
-                bts.innerHTML = '<button onclick="mudarFase(31)">🤫 Revelação Proibida (2 min)</button>' +
-                                '<button onclick="mudarFase(32)">👀 Olhar Hipnótico (2 min)</button>';
+                txt.innerText = "Hora da verdade. O Convidado deve revelar uma fantasia secreta ou um desejo que nunca confessou antes. O Anfitrião ouve atentamente.";
+                segundos = 120;
+                atualizarTextoTempo();
+                bts.innerHTML = '<button onclick="mudarFase(4)">Avançar para o Kamasutra</button>';
             }
-            else if (faseAtual == 31) {
-                txt.innerText = "O Convidado tem 2 minutos para confessar um desejo ou fantasia íntima que nunca partilhou com ninguém. O Anfitrião apenas ouve sem julgar.";
-                segundos = 120; atualizarTextoTempo();
+            else if (faseAtual == 4) {
+                txt.innerText = "Os corpos e as mentes estão sintonizados. Explorem a posição sugerida abaixo sem pressas. Concentrem-se na entrega mútua.";
+                segundos = 180; // 3 minutos
+                atualizarTextoTempo();
+                
+                var sorteada = posicoes[Math.floor(Math.random() * posicoes.length)];
+                kama.innerHTML = '<div class="card">' + sorteada + '</div>';
+                
+                bts.innerHTML = '<button onclick="mudarFase(4)">🔄 Sortear Outra Posição</button><button onclick="mudarFase(5)">👑 Concluir Rodada</button>';
+            }
+            else if (faseAtual == 5) {
+                txt.innerText = "A rodada terminou com sucesso! Parabéns pela ligação construída esta noite. Quem acumulou mais pontos pode escolher a próxima fantasia real.";
+                segundos = 60;
+                atualizarTextoTempo();
+                bts.innerHTML = '<button onclick="mudarFase(1)">🔄 Jogar Novamente</button>';
+            }
+        }
+
+        function ligarCronometro() {
+            if (relogioRodando != null) return;
+            relogioRodando = setInterval(function() {
+                if (segundos > 0) {
+                    segundos--;
+                    atualizarTextoTempo();
+                } else {
+                    pararCronometro();
+                    alert("✨ Tempo esgotado! Concluam a ação ou passem ao próximo passo.");
+                }
+            }, 1000);
+        }
+
+        function pararCronometro() {
+            clearInterval(relogioRodando);
+            relogioRodando = null;
+        }
+
+        function atualizarTextoTempo() {
+            var min = Math.floor(segundos / 60);
+            var sec = segundos % 60;
+            if (min < 10) min = "0" + min;
+            if (sec < 10) sec = "0" + sec;
+            document.getElementById("tempo-texto").innerText = min + ":" + sec;
+        }
+    </script>
+
+</body>
+</html>
