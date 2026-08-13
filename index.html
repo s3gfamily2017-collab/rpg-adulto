@@ -2,91 +2,114 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AURA</title>
     <style>
         body { background: #0d0614; color: #f3e6ff; font-family: sans-serif; text-align: center; padding: 15px; margin: 0; }
         .painel { background: #251438; border: 1px solid #3d2353; border-radius: 12px; padding: 10px; margin-bottom: 15px; }
-        .box { background: #1a0f26; border: 2px solid #3d2353; padding: 20px; border-radius: 16px; margin-bottom: 15px; text-align: center; }
-        .relogio { font-size: 36px; font-weight: bold; color: #d4af37; margin: 10px 0; letter-spacing: 1px; }
-        .card { background: #2a163d; border: 2px solid #d4af37; padding: 18px; border-radius: 12px; margin-top: 15px; line-height: 1.6; text-align: left; }
+        .box { background: #1a0f26; border: 2px solid #3d2353; padding: 20px; border-radius: 16px; margin-bottom: 15px; }
+        .relogio { font-size: 36px; font-weight: bold; color: #d4af37; margin: 10px 0; }
+        .card { background: #2a163d; border: 2px solid #d4af37; padding: 18px; border-radius: 12px; margin-top: 15px; text-align: left; }
         .card-title { color: #d4af37; font-weight: bold; font-size: 18px; margin-bottom: 8px; text-align: center; }
-        .card-step { margin-top: 8px; font-size: 14px; color: #e1ccec; border-top: 1px dashed #3d2353; padding-top: 8px; }
-        .nivel-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase; margin-bottom: 10px; }
-        .nivel-1 { background: #008080; color: white; }
-        .nivel-2 { background: #b58900; color: white; }
-        .nivel-3 { background: #8a184e; color: white; }
         button { background: #8a184e; color: white; border: none; padding: 14px 20px; border-radius: 8px; font-size: 15px; cursor: pointer; margin: 8px auto; width: 95%; max-width: 340px; display: block; font-weight: bold; }
-        button:disabled { background: #2c1a30 !important; color: #5c4366 !important; border: 1px dashed #3d2353; cursor: not-allowed; }
         .btn-pequeno { width: auto; padding: 5px 15px; background: #3d2353; font-size: 14px; display: inline-block; margin: 0 4px; }
-        .btn-link { background: #d4af37; color: #0d0614; font-weight: bold; width: auto; display: inline-block; }
-        .aviso-tempo { font-size: 13px; color: #ff4d4d; font-style: italic; margin-top: 5px; }
     </style>
 </head>
 <body>
 
     <h2>AURA: Tesão Total</h2>
 
+    <!-- Pontuação Direta sem Erros -->
     <div class="painel">
         <p>Anfitrião: <span id="v1">0</span> | Convidado: <span id="v2">0</span></p>
-        <button class="btn-pequeno" onclick="adicionarPonto('p1')">Anfitrião +1</button>
-        <button class="btn-pequeno" onclick="adicionarPonto('p2')">Convidado +1</button>
+        <button class="btn-pequeno" onclick="document.getElementById('v1').innerText = parseInt(document.getElementById('v1').innerText)+1">Anfitrião +1</button>
+        <button class="btn-pequeno" onclick="document.getElementById('v2').innerText = parseInt(document.getElementById('v2').innerText)+1">Convidado +1</button>
     </div>
 
+    <!-- Temporizador Simplificado -->
     <div class="painel">
         <div class="relogio" id="tempo-texto">05:00</div>
-        <button class="btn-pequeno" onclick="ligarCronometro()">Iniciar Tempo</button>
+        <button class="btn-pequeno" onclick="ligarCronometro()">Iniciar</button>
         <button class="btn-pequeno" onclick="pararCronometro()">Pausar</button>
     </div>
 
+    <!-- Conteúdo do Jogo -->
     <div class="box">
-        <div id="bloco-nivel"></div>
-        <p id="narracao">Prepara o quarto e desnum-se. Decidam quem vai mandar primeiro (Anfitrião) e quem vai obedecer (Convidado).</p>
+        <p id="narracao">Bem-vindos ao AURA. Decidam quem vai mandar primeiro (Anfitrião) e quem vai obedecer (Convidado).</p>
         <div id="bloco-kama"></div>
     </div>
 
+    <!-- Botão de Avanço Simples -->
     <div id="bloco-botoes">
-        <button onclick="mudarFase(1)">Papéis Definidos: Iniciar Preliminares</button>
+        <button onclick="avancarFase()">Começar Preliminares</button>
     </div>
 
     <script>
-        var faseAtual = 0;
+        var fase = 0;
         var segundos = 300;
-        var relogioRodando = null;
-        var pontosP1 = 0;
-        var pontosP2 = 0;
+        var loop = null;
 
-        var basePosicoes = {
-            nivel1: [
-                { title: "Massagem e Sopro", desc: "Aquecimento focado em provocar pele com pele e acumular tesão sem penetração.", step: "Como fazer: O Anfitrião fecha os olhos. O Convidado esfrega as mãos com óleo quente e aperta o rabo, coxas e costas do parceiro, alternando com sopros quentes nos colhões ou na rata.", link: "https://google.com" },
-                { title: "Lamber e Provocar", desc: "Estímulo húmido para acordar a sensibilidade dos mamilos e zonas erógenas.", step: "Como fazer: O Convidado deve usar a ponta da língua molhada para lamber os mamilos, o pescoço e a virilha do parceiro, aproximando-se da piça ou da rata mas sem lhes tocar diretamente.", link: "https://google.com" },
-                { title: "Roçar de Corpos", desc: "Contacto total de pele e fricção para aumentar a lubrificação e o desejo.", step: "Como fazer: Completamente nus, deitados de frente um para o outro. Roçam a piça na rata ou nos colhões, apertando os peitos com força, apenas sentindo o calor um do outro por 5 minutos.", link: "https://google.com" },
-                { title: "Dedos e Provocação", desc: "Exploração manual lenta para humedecer a rata ou aquecer a piça sem pressas.", step: "Como fazer: O Convidado usa os dedos lubrificados para acariciar e esfregar o clitóris e os lábios da rata, ou para puxar e massajar o corpo da piça e o saco, mantendo o parceiro à beira do colapso.", link: "https://google.com" },
-                { title: "Masturbação Mútua Espelhada", desc: "Estímulo visual intenso para subirem o tesão ao mesmo tempo, olhando um para o outro.", step: "Como fazer: Sentem-se de frente um para o outro na cama, mantendo uma distância curta. Começam a masturbar-se sozinhos (bater pheta ou esfregar a rata), olhando fixamente nos olhos ou nas mãos do parceiro.", link: "https://google.com" },
-                { title: "Lamber por Trás", desc: "Preliminar de joelhos com foco total no rabo e na humidade das zonas traseiras.", step: "Como fazer: O Anfitrião fica de quatro na cama. O Convidado mete-se atrás de joelhos e usa a língua para dar lambidelas lentas nas pregas do cu e na parte de trás dos colhões ou da rata, apertando as ancas com força.", link: "https://google.com" }
-            ],
-             nivel2: [
-                { title: "Chupar na Cama", desc: "Sexo oral clássico e profundo com o máximo de conforto para quem está a mamar.", step: "Como fazer: Quem vai receber deita-se de costas com duas almofadas debaixo do rabo para empinar bem a piça ou a rata. Quem mama fica de joelhos no meio das pernas, focando em lamber e chupar sem pressas.", link: "https://google.com" },
-                { title: "Mamada de Cadeira", desc: "Sexo oral na vertical com controlo total e facilidade para engolir.", step: "Como fazer: O Anfitrião senta-se numa cadeira ou na borda da cama. O Convidado fica de joelhos no chão à sua frente. Podes segurar a cabeça do parceiro enquanto ele te chupa a piça ou te lambe a rata.", link: "https://google.com" },
-                { title: "69 de Lado", desc: "Chuparem-se mutuamente na posição mais relaxada possível para ninguém se cansar.", step: "Como fazer: Deitem-se ambos de lado, mas invertidos (a tua boca fica na piça/rata dele e a boca dele na tua). É uma conchinha invertida onde os dois chupam e lambem ao mesmo tempo.", link: "https://google.com" },
-                { title: "Garganta Funda na Borda", desc: "Sexo oral com a cabeça pendurada para alinhar a garganta e engolir tudo.", step: "Como fazer: Quem recebe deita-se de costas na cama, mas com a cabeça e os ombros pendurados um pouco para fora da borda do colchão. O parceiro ativo fica de joelhos ou de pé no chão, empurrando a piça ou oferecendo a rata diretamente na boca de cima para baixo.", link: "https://google.com" },
-                { title: "O Trono Humano", desc: "Acesso total à rata ou à piça por trás com o parceiro sentado em cima.", step: "Como fazer: O parceiro ativo deita-se de costas na cama. Quem vai receber o sexo oral senta-se por cima da cara dele, virado para os pés, de joelhos, baixando o quadril para colar a rata ou os colhões diretamente na boca e na língua de quem está deitado.", link: "https://google.com" },
-                { title: "Submissão de Bruços", desc: "Estimulação oral por trás com foco total no rabo e nas coxas.", step: "Como fazer: Quem recebe deita-se de barriga para baixo na cama (de bruços) e coloca uma almofada debaixo da barriga para empinar o quadril. O parceiro ativo mete-se por trás, de joelhos entre as pernas dele, e lambe a rata ou os colhões por trás, com acesso livre para chupar e lamber o cu.", link: "https://google.com" },
-                { title: "A Cavalgada Oral", desc: "Quem dita o ritmo e a profundidade com a boca é quem está por cima.", step: "Como fazer: O Anfitrião deita-se de costas com a cabeça numa almofada. O Convidado agacha-se ou ajoelha-se por cima da sua cara, controlando a descida da rata ou da piça na boca e língua do parceiro de forma muito húmida.", link: "https://google.com" },
-                { title: "Mamada de Quatro", desc: "Acesso total por trás numa posição de submissão muito visual.", step: "Como fazer: Quem recebe fica de quatro na cama, empinando bem o rabo. O parceiro ativo acomoda-se logo atrás de joelhos, passando as mãos pelas ancas e inclinando o tronco para lamber a rata ou chupar a piça por baixo e por trás.", link: "https://google.com" },
-            ],
-           nivel3: [{ title: "Foder de Lótus", desc: "Penetração total e profunda sentados, focando no aperto e nos beijos.", step: "Como fazer: O Anfitrião senta-se de pernas cruzadas. O Convidado senta-se por cima do seu colo, cavalgando e enfiando a piça lá dentro, enquanto se abraçam e beijam com força.", link: "google.com" },
-                    { title: "Cavalgada Selvagem", desc: "Controlo total da profundidade e do aperto por parte de quem fica por cima.", step: "Como fazer: O Anfitrião deita-se de costas. O Convidado antes senta-se por cima da piça, controlando o ritmo da foda, subindo e descendo enquanto esfrega o clitóris ou aperta o saco.", link: "google.com" },
-                    { title: "Foder de Quatro", desc: "A posição ideal para penetração anal ou vaginal profunda e estalos fortes no rabo.", step: "Como fazer: O Convidado fica de quatro na cama, empinando bem o rabo. O Anfitrião mete-se atrás de joelhos e penetra por trás com força, segurando firmemente nas ancas.", link: "google.com" },
-                    { title: "O Triângulo Almofadado", desc: "Ângulo inclinado que alinha a penetração perfeita com o mínimo de esforço.", step: "Como fazer: Quem recebe deita-se de costas com três almofadas empilhadas debaixo do rabo para levantar bem a bacia. O parceiro entra por cima mantendo o peito e a boca colados, permitindo uma foda macia mas muito funda.", link: "google.com" },
-                    { title: "Foda na Borda da Cama", desc: "Penetração em pé ou de joelhos que dá controle absoluto de profundidade ao parceiro ativo.", step: "Como fazer: Quem recebe fica deitado de costas, mas desliza o rabo até ficar mesmo no limite da borda do colchão, dobrando os joelhos. O parceiro ativo fica de pé ou de joelhos no chão à frente, metendo a piça lá dentro e estourando com total liberdade para bater no rabo.", link: "google.com" },
-                    { title: "Tesoura de Lado", desc: "Foda lateral extremamente colada, perfeita para sussurrar ao ouvido e foder devagar.", step: "Como fazer: Deitem-se ambos de lado, virados de frente um para o outro. As vossas pernas entrelaçam-se como uma tesoura aberta (uma perna tua fica por cima do quadril dele). Isto permite que a piça entre de lado na rata ou no cu, de forma lenta e muito húmida.", link: "google.com" },
-                    { title: "O Trono de Marfim", desc: "Foda sentada com excelente estimulação visual e liberdade total para as mãos apertarem.", step: "Como fazer: O Anfitrião senta-se na borda da cama com os pés bem assentes no chão. O Convidado senta-se de costas para ele, no seu colo, enfiando a piça e controlando o subir e descer enquanto os braços do Anfitrião lhe apertam as coxas ou os peitos.", link: "google.com" },
-                    { title: "A Garça Real", desc: "Uma foda assimétrica profunda que altera a perceção e o aperto da rata ou do cu.", step: "Como fazer: Um parceiro deita-se de costas na cama e eleva apenas uma das pernas, apoiando-a sobre o ombro do parceiro ativo (que fica de joelhos). A outra perna permanece esticada, criando um ângulo de penetração ultra-fundo.", link: "google.com" },
-                    { title: "A Flor de Jasmim Invertida", desc: "Uma variação cavalgada de costas onde o parceiro ativo assiste a toda a movimentação do rabo.", step: "Como fazer: O Anfitrião deita-se de costas. O Convidado senta-se por cima da piça, mas virado na direção oposta (olhando para os pés do Anfitrião), cavalgando de costas enquanto o Anfitrião foca o olhar e as mãos no aperto do rabo.", link: "google.com" },
-                    { title: "A Ponte de Ouro Elevada", desc: "Foda de joelhos activa com o rabo completamente suspenso e empinado.", step: "Como fazer: Quem recebe deita-se de costas e levanta a bacia fazendo uma ponte com o corpo (pode enfiar duas almofadas debaixo para ajudar). O parceiro ativo ajoelha-se no meio das pernas e enterra a piça com força total de cima para baixo.", link: "google.com" },
-                    { title: "O Arco do Triunfo Lateral", desc: "Foda deitados de lado, colados de frente, ideal para morder e foder devagar.", step: "Como fazer: Deitem-se ambos de lado na cama, cara com cara. O Convidado joga uma perna por cima da anca do Anfitrião para escancarar o acesso. A piça entra de lado e permite que fiquem colados, a dar beijos na boca e a roçar os peitos com força.", link: "google.com" },
-                    { title: "Foda de Pé contra a Parede", desc: "Penetração vertical agressiva cheia de adrenalina e pegada forte.", step: "Como fazer: O Convidado encosta-se de costas contra a parede e salta, entrelaçando as pernas à volta da cintura do Anfitrião. O Anfitrião segura firmemente o rabo e as coxas do parceiro com os dois braços, enfiando a piça e fodendo no ar com força contra a parede.", link: "google.com" }]};
+        var n1 = ["Massagem e Sopro (Aperta o rabo e coxas com óleo quente)", "Lamber e Provocar (Lambe os mamilos e o pescoço)", "Roçar de Corpos (Roça a o caralho na cona completamente nus)"];
+        var n2 = ["Chupar na Cama (Com duas almofadas debaixo do rabo)", "Mamada de Cadeira (Anfitrião sentado e Convidado de joelhos)", "69 de Lado (Chuparem-se mutuamente deitados de lado)"];
+        var n3 = ["Foder de Lótus (Penetração sentados colados no colo)", "Cavalgada Selvagem (Convidado por cima controlando o ritmo)", "Foder de Quatro (Convidado de quatro empinando bem o cu)"];
 
-        function mudarPontos(player) {
+        function avancarFase() {
+            fase++;
+            var txt = document.getElementById("narracao");
+            var kama = document.getElementById("bloco-kama");
+            var bts = document.getElementById("bloco-botoes");
+
+            kama.innerHTML = "";
+            pararCronometro();
+
+            if (fase == 1) {
+                txt.innerText = "Nível 1: Preliminares. Cumpram o desafio sorteado durante 5 minutos:";
+                segundos = 300;
+                kama.innerHTML = '<div class="card"><div class="card-title">' + n1[Math.floor(Math.random() * n1.length)] + '</div></div>';
+                bts.innerHTML = '<button onclick="avancarFase()">Ir para Nível 2 (Sexo Oral)</button>';
+            } 
+            else if (fase == 2) {
+                txt.innerText = "Nível 2: Sexo Oral. Chupem ou lambam com vontade durante 7 minutos:";
+                segundos = 420;
+                kama.innerHTML = '<div class="card"><div class="card-title">' + n2[Math.floor(Math.random() * n2.length)] + '</div></div>';
+                bts.innerHTML = '<button onclick="avancarFase()">Ir para Nível 3 (Foder)</button>';
+            } 
+            else if (fase == 3) {
+                txt.innerText = "Nível 3: Posições de Foda. Metam o caralho lá dentro e fodam bem durante 10 minutos:";
+                segundos = 600;
+                kama.innerHTML = '<div class="card"><div class="card-title">' + n3[Math.floor(Math.random() * n3.length)] + '</div></div>';
+                bts.innerHTML = '<button onclick="avancarFase()">Ver Castigo de Submissão</button>';
+            } 
+            else if (fase == 4) {
+                var p1 = parseInt(document.getElementById("v1").innerText);
+                var p2 = parseInt(document.getElementById("v2").innerText);
+                var perdedor = p1 < p2 ? "Anfitrião" : "Convidado";
+                if (p1 == p2) perdedor = "Os dois (Empate)";
+                
+                txt.innerText = "Fim de Jogo! O perdedor é o " + perdedor + ". Deve abrir as pernas e submeter-se à foda final escolhida pelo parceiro.";
+                bts.innerHTML = '<button onclick="fase=0; avancarFase();">Iniciar Nova Escalada</button>';
+            }
+            atualizarRelogio();
+        }
+
+        function ligarCronometro() {
+            if (loop != null) return;
+            loop = setInterval(function() {
+                if (segundos > 0) { segundos--; atualizarRelogio(); } 
+                else { pararCronometro(); alert("Tempo esgotado!"); }
+            }, 1000);
+        }
+
+        function pararCronometro() { clearInterval(loop); loop = null; }
+
+        function atualizarRelogio() {
+            var m = Math.floor(segundos / 60);
+            var s = segundos % 60;
+            if (m < 10) m = "0" + m;
+            if (s < 10) s = "0" + s;
+            document.getElementById("tempo-texto").innerText = m + ":" + s;
+        }
+    </script>
+</body>
+</html>
 
