@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>AURA: Escalada Erótica</title>
+    <title>AURA</title>
     <style>
         body { background: #0d0614; color: #f3e6ff; font-family: sans-serif; text-align: center; padding: 15px; margin: 0; }
         .painel { background: #251438; border: 1px solid #3d2353; border-radius: 12px; padding: 10px; margin-bottom: 15px; }
@@ -27,28 +27,24 @@
 
     <h2>AURA: Tesão Total</h2>
 
-    <!-- Pontuação -->
     <div class="painel">
         <p>Anfitrião: <span id="v1">0</span> | Convidado: <span id="v2">0</span></p>
-        <button class="btn-pequeno" onclick="mudarPontos('p1')">Anfitrião +1</button>
-        <button class="btn-pequeno" onclick="mudarPontos('p2')">Convidado +1</button>
+        <button class="btn-pequeno" onclick="adicionarPonto('p1')">Anfitrião +1</button>
+        <button class="btn-pequeno" onclick="adicionarPonto('p2')">Convidado +1</button>
     </div>
 
-    <!-- Temporizador -->
     <div class="painel">
         <div class="relogio" id="tempo-texto">05:00</div>
         <button class="btn-pequeno" onclick="ligarCronometro()">Iniciar Tempo</button>
         <button class="btn-pequeno" onclick="pararCronometro()">Pausar</button>
     </div>
 
-    <!-- Conteúdo Principal -->
     <div class="box">
         <div id="bloco-nivel"></div>
         <p id="narracao">Prepara o quarto e desnum-se. Decidam quem vai mandar primeiro (Anfitrião) e quem vai obedecer (Convidado).</p>
         <div id="bloco-kama"></div>
     </div>
 
-    <!-- Botões de Ação -->
     <div id="bloco-botoes">
         <button onclick="mudarFase(1)">Papéis Definidos: Iniciar Preliminares</button>
     </div>
@@ -59,7 +55,6 @@
         var relogioRodando = null;
         var pontosP1 = 0;
         var pontosP2 = 0;
-        var tempoAcabou = false;
 
         var basePosicoes = {
             nivel1: [
